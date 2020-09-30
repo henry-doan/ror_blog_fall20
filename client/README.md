@@ -1,13 +1,17 @@
             index
               | 
               app (nav routes)
-  home     about     posts (HOC)    404page        
-                      /  \                           
-             add   form   list                         
+  home     about     posts (HOC)     404page        context globals
+                      /  \                           provider
+             add   form   list                         consumer
                            \
-                            post
-                              \ 
-                               form update
+                            post delete
+                            /  \ 
+                  Comments (Hoc) form update
+                      /\
+                  form  list
+
+prop drilling  
 
 import { Fragment } from 'react'
 

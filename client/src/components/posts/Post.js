@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Modal, Button } from 'semantic-ui-react';
 import PostForm from './PostForm';
+import { Link } from 'react-router-dom';
 
 class Post extends Component {
   state = { editing: false }
@@ -33,6 +34,12 @@ class Post extends Component {
           </Modal.Content>
         </Modal>
         <Button color='red' onClick={() => deletePost(id)}>Delete</Button>
+        <Link to={{
+          pathname: `/posts/${id}/comments`,
+          state: { post_id: id, post_name: title }
+        }}>
+          <Button color='green'>Comments</Button>
+        </Link>
       </>
     )
   }
