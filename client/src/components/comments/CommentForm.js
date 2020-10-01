@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
+import { CommentConsumer } from '../../providers/CommentProvider';
 
 class CommentForm extends Component {
   state = { author: '', subject: '', body: '' }
@@ -11,7 +12,8 @@ class CommentForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.addComment(this.state)
+    const { post_id, addComment } = this.props
+    addComment(post_id, this.state)
     this.setState({ author: '', subject: '', body: '' })
   }
 
@@ -41,4 +43,18 @@ class CommentForm extends Component {
   }
 }
 
-export default CommentForm;
+const ConnectedCommentForm = (props) => (
+  <CommentConsumer>
+    {
+      value => (
+        <CommentForm 
+          {...props}
+          // {...value}
+          addComment={value.addComment}
+        />
+      )
+    }
+  </CommentConsumer>
+)
+
+export default ConnectedCommentForm;

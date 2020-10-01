@@ -6,6 +6,7 @@ import Nomatch from './components/shared/Nomatch';
 import Navbar from './components/shared/Navbar';
 import Posts from './components/posts/Posts'; 
 import Comments from './components/comments/Comments';
+import Comment from './components/comments/Comment';
 
 const App = () => (
   <>
@@ -15,6 +16,7 @@ const App = () => (
       <Route exact path='/about' component={About} />
       <Route exact path='/posts' component={Posts} />
       <Route exact path='/posts/:id/comments' component={Comments} />
+      <Route exact path='/comments/:id' component={Comment} />
       <Route component={Nomatch} />
     </Switch>
   </>

@@ -1,28 +1,36 @@
 import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
-import axios from 'axios';
+import { Header, List } from 'semantic-ui-react';
 import CommentForm from './CommentForm';
+import { CommentConsumer } from '../../providers/CommentProvider';
+import { Link } from 'react-router-dom';
 
 class Comments extends Component {
-  state = { comments: [] }
-
   componentDidMount() {
     const { post_id } = this.props.location.state
-    axios.get(`/api/posts/${post_id}/comments`)
-      .then( res => {
-        this.setState({ comments: res.data })
-      })
-      .catch(err => console.log(err))
+    this.props.getComments(post_id);
   }
 
-  addComment = (comment) => {
+  listAllComments = () => {
     const { post_id } = this.props.location.state
-    axios.post(`/api/posts/${post_id}/comments`, {comment}) 
-      .then( res => {
-        const { comments } = this.state
-        this.setState({ comments: [...comments, res.data] })
-      })
-      .catch(err => console.log(err))
+    if (this.props.comments) {
+      return (
+        <List divided relaxed>
+          { this.props.comments.map( c => 
+            <>
+              <Link to={{
+                pathname: `/comments/${c.id}`,
+                state: { ...c, post_id: post_id }
+              }}>
+                {c.subject}
+              </Link>
+              <br />
+            </>
+          )}
+        </List>
+      )
+    } else {
+      return ( <h1>No Comments</h1> )
+    }
   }
 
   render() {
@@ -30,10 +38,24 @@ class Comments extends Component {
     return( 
       <>
         <Header>{post_name} Comments</Header>
-        <CommentForm addComment={this.addComment} />
+        <CommentForm post_id={post_id} />
+        { this.listAllComments() }
       </>
     )
   }
 }
 
-export default Comments; 
+const ConnectedComments = (props) => (
+  <CommentConsumer>
+    {
+      value => (
+        <Comments
+          {...props}
+          {...value}
+        />
+      )
+    }
+  </CommentConsumer>
+) 
+
+export default ConnectedComments; 
